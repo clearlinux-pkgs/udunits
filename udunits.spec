@@ -4,16 +4,18 @@
 #
 Name     : udunits
 Version  : 2.2.26
-Release  : 1
+Release  : 2
 URL      : ftp://ftp.unidata.ucar.edu/pub/udunits/udunits-2.2.26.tar.gz
 Source0  : ftp://ftp.unidata.ucar.edu/pub/udunits/udunits-2.2.26.tar.gz
-Summary  : A tool for calculations of physical quantities
+Summary  : No detailed summary available
 Group    : Development/Tools
 License  : BSD-3-Clause
 Requires: udunits-bin = %{version}-%{release}
 Requires: udunits-data = %{version}-%{release}
+Requires: udunits-info = %{version}-%{release}
 Requires: udunits-lib = %{version}-%{release}
 Requires: udunits-license = %{version}-%{release}
+BuildRequires : CUnit-dev
 BuildRequires : bison
 BuildRequires : buildreq-cmake
 BuildRequires : expat-dev
@@ -66,9 +68,18 @@ dev components for the udunits package.
 %package doc
 Summary: doc components for the udunits package.
 Group: Documentation
+Requires: udunits-info = %{version}-%{release}
 
 %description doc
 doc components for the udunits package.
+
+
+%package info
+Summary: info components for the udunits package.
+Group: Default
+
+%description info
+info components for the udunits package.
 
 
 %package lib
@@ -91,28 +102,34 @@ license components for the udunits package.
 
 %prep
 %setup -q -n udunits-2.2.26
+cd %{_builddir}/udunits-2.2.26
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
-export SOURCE_DATE_EPOCH=1551634626
+export LANG=C.UTF-8
+export SOURCE_DATE_EPOCH=1573791096
+export GCC_IGNORE_WERROR=1
+export CFLAGS="$CFLAGS -fno-lto "
+export FCFLAGS="$CFLAGS -fno-lto "
+export FFLAGS="$CFLAGS -fno-lto "
+export CXXFLAGS="$CXXFLAGS -fno-lto "
 %configure --disable-static
 make  %{?_smp_mflags}
 
 %check
-export LANG=C
+export LANG=C.UTF-8
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1551634626
+export SOURCE_DATE_EPOCH=1573791096
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/udunits
-cp COPYRIGHT %{buildroot}/usr/share/package-licenses/udunits/COPYRIGHT
+cp %{_builddir}/udunits-2.2.26/COPYRIGHT %{buildroot}/usr/share/package-licenses/udunits/1201ba41648bc95438bc2529ba3691dbc76438ef
 %make_install
 
 %files
@@ -133,13 +150,20 @@ cp COPYRIGHT %{buildroot}/usr/share/package-licenses/udunits/COPYRIGHT
 
 %files dev
 %defattr(-,root,root,-)
-/usr/include/*.h
+/usr/include/converter.h
+/usr/include/udunits.h
+/usr/include/udunits2.h
 /usr/lib64/libudunits2.so
 
 %files doc
 %defattr(0644,root,root,0755)
 %doc /usr/share/doc/udunits/*
-%doc /usr/share/info/*
+
+%files info
+%defattr(0644,root,root,0755)
+/usr/share/info/udunits2.info
+/usr/share/info/udunits2lib.info
+/usr/share/info/udunits2prog.info
 
 %files lib
 %defattr(-,root,root,-)
@@ -148,4 +172,4 @@ cp COPYRIGHT %{buildroot}/usr/share/package-licenses/udunits/COPYRIGHT
 
 %files license
 %defattr(0644,root,root,0755)
-/usr/share/package-licenses/udunits/COPYRIGHT
+/usr/share/package-licenses/udunits/1201ba41648bc95438bc2529ba3691dbc76438ef
