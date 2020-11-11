@@ -4,7 +4,7 @@
 #
 Name     : udunits
 Version  : 2.2.26
-Release  : 2
+Release  : 3
 URL      : ftp://ftp.unidata.ucar.edu/pub/udunits/udunits-2.2.26.tar.gz
 Source0  : ftp://ftp.unidata.ucar.edu/pub/udunits/udunits-2.2.26.tar.gz
 Summary  : No detailed summary available
@@ -109,11 +109,11 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1573791096
+export SOURCE_DATE_EPOCH=1605120626
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto "
-export FCFLAGS="$CFLAGS -fno-lto "
-export FFLAGS="$CFLAGS -fno-lto "
+export FCFLAGS="$FFLAGS -fno-lto "
+export FFLAGS="$FFLAGS -fno-lto "
 export CXXFLAGS="$CXXFLAGS -fno-lto "
 %configure --disable-static
 make  %{?_smp_mflags}
@@ -123,10 +123,10 @@ export LANG=C.UTF-8
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-make VERBOSE=1 V=1 %{?_smp_mflags} check
+make %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1573791096
+export SOURCE_DATE_EPOCH=1605120626
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/udunits
 cp %{_builddir}/udunits-2.2.26/COPYRIGHT %{buildroot}/usr/share/package-licenses/udunits/1201ba41648bc95438bc2529ba3691dbc76438ef
